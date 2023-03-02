@@ -1,0 +1,53 @@
+
+  //info page styles
+  .info-page {
+    background-color: white;
+    font-family: 'Roboto Mono', monospace; 
+    display: flex;
+    min-width: 350px;
+    flex-direction: column;
+    padding: 20px;
+    padding-bottom: 80px;
+    box-shadow: 5px 5px 5px #00000033;
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .info-wrapper {
+    display: grid;
+    padding-left: 15px;
+    grid-template-columns: 150px 250px;
+    grid-gap: 10px;
+    row-gap: 30px;
+    overflow-wrap: break-word;
+  }
+
+  .info-page h2 {
+    padding: 20px;
+    background-color: rgb(71, 78, 96);
+    box-shadow: 5px 5px 5px #00000033;
+    color: white;
+    font-family: 'Roboto Mono', monospace; 
+    text-align: left;
+    font-size: 45px;
+    font-weight: 700;
+  }
+
+  .info-page ul {
+    float: left;
+  }
+
+  .description  {
+    padding-left: 15px;
+  }
+
+  @counter-style counter {
+    system: cyclic;
+    symbols: "\1F638" "\1F47D" "\1F916" "\1F47E";
+    suffix: "";
+  }
+
+  .info-page ul {
+    margin: 15px;
+    list-style-type: counter;
+  }
