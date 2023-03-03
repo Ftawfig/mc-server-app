@@ -1,12 +1,16 @@
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 import getConfig from 'next/config';
 
-import { apiHandler } from 'helpers/api';
-
+//import { apiHandler } from 'helpers/api';
 const { serverRuntimeConfig } = getConfig();
 
 // users in JSON file for simplicity, store in a db for production applications
 const users = require('/users.json');
+
+function jwtMiddleware(req, res) {
+    const middleware = expressJwt({ secret : serverRuntimeConfig.secret, algorithms: ['HS256'] });
+}
 
 export default function handler(req, res) {
     if (req.method == 'POST') {
@@ -16,8 +20,9 @@ export default function handler(req, res) {
     }
 
     function authenticate() {
-        const { username, password } = req.body;
-        const user = users.find(u => u.username === username && u.password === password);
+        console.log(req.body);
+        const { email, password } = req.body;
+        const user = users.find(u => u.email === email && u.password === password);
 
         if (!user) throw 'Username or password is incorrect';
     
@@ -27,7 +32,7 @@ export default function handler(req, res) {
         // return basic user details and token
         return res.status(200).json({
             id: user.id,
-            username: user.username,
+            email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
             token

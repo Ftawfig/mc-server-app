@@ -32,8 +32,6 @@ const stopServer = async () => {
   console.log(data);
 };
 
-
-
 export default function Account({ serverStatus }) {  
   const router = useRouter();
   
