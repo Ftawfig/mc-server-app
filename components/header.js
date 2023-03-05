@@ -5,9 +5,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'next/image';
 import { React, useEffect, useState } from 'react';
+import { getUserContext } from '../context/UserContext';
 
 
 export default function Header() {
+  const { user } = getUserContext();
 
   return (
       <>
@@ -31,9 +33,12 @@ export default function Header() {
               <Navbar.Collapse id="basic-navbar-nav" >
                 <Nav className="me-auto">
                   <Nav.Link  href="/">Home</Nav.Link>
-                  <Nav.Link  href={"/server-status"}>Server Status</Nav.Link>
-                  <Nav.Link  href={"/account"}>My Account</Nav.Link>
-                  <Nav.Link  href={"/login"}>Login</Nav.Link>
+                  <Nav.Link  href={"/account"}>{ user ? user.email : 'My Account'}</Nav.Link>
+                  <Nav.Link  href={
+                    user ? "/logout" : "/login"
+                    }>{ 
+                    user ? "Logout" : "Login"
+                  }</Nav.Link>
                   <Nav.Link className='ml-auto' href="/sign-up">Sign-Up</Nav.Link>
                 </Nav>
               </Navbar.Collapse>

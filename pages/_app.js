@@ -3,7 +3,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import '../styles/styles.scss';
 import '../styles/info-styles.scss';
-import { UserContext } from '../context';
+import { UserProvider } from '../context/UserContext';
 
 export function Layout({ children }) {
   return (
@@ -23,8 +23,10 @@ export default function MyApp({ Component, pageProps }) {
 
     return (
         <>
+        <UserProvider>
           <Layout />
           <Component {...pageProps} />
+        </UserProvider>
         </>
       );
   }

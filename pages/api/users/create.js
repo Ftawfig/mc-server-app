@@ -1,17 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-const secret = process.env.TOKEN_SECRET;
-
-// users in JSON file for simplicity, store in a db for production applications
-const users = require('/users.json');
-
-export function verifyToken(token) {
-    try {
-        return jwt.verify(token, secret)
-    } catch (err) {
-        return
-    }
-}
+import db from '/services/db.service.js';
 
 export default function handler(req, res) {
     if (req.method == 'POST') {

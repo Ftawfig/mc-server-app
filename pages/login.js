@@ -4,25 +4,46 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useContext } from "react";
-import { UserContext } from './_app';
+import Alert from 'react-bootstrap/Alert';
+import { useRouter } from 'next/router';
 import { userService } from '../services/user.services'
 
 export default function Login() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     "email" : "",
-    "password" : ""
+    "password" : "",
+    "remember_user" : true
   });
+
+  const [error, setError] = useState(null);
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    console.log(`id: ${id} value: ${value}`);
     setFormData({ ...formData, [id]: value });
+  };
+
+  const handleCheck = (event) => {
+    const checked = event.target.checked;
+    console.log(checked);
+    setFormData({ ...formData, "remember_user": checked });
   };
   
   const handleSubmit = () => {
+    event.preventDefault();
+
+    console.log(formData);
+    
     //TODO - add validation later
-    return userService.login(formData);
+    const response = userService.login(formData).then((res) => {
+      if (res.status == 401) {
+        setError(res.message);
+      } else {
+        document.cookie = `auth_token=${res.token}`
+        router.push('/account');
+      }
+    });
   };
 
   return (
@@ -33,19 +54,22 @@ export default function Login() {
                   <Container className="login-container border rounded container-sm">
                       <h1>Login</h1>
                       <Form>
-                        <Form.Group className="mb-3" controlId="formBasicEmail" onChange={handleChange}>
+                        <Alert variant="danger" show={error} >
+                          Error: { error }
+                        </Alert>
+                        <Form.Group className="mb-3" controlId="email" onChange={handleChange}>
                           <Form.Label>Email address</Form.Label>
-                          <Form.Control id="email" type="email" placeholder="Enter email" />
+                          <Form.Control type="email" placeholder="Enter email" />
                           <Form.Text className="text-muted">
                             We'll never share your email with anyone else.
                           </Form.Text>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Group className="mb-3" controlId="password">
                           <Form.Label>Password</Form.Label>
-                          <Form.Control id="password" type="password" placeholder="Password" onChange={handleChange}/>
+                          <Form.Control type="password" placeholder="Password" onChange={handleChange}/>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                          <Form.Check type="checkbox" label="Remember password" />
+                        <Form.Group className="mb-3" controlId="checkbox">
+                          <Form.Check type="checkbox" label="Stay signed-in" defaultChecked onChange={handleCheck}/>
                         </Form.Group>
                         <Button variant="primary" type="submit" onClick={handleSubmit}>
                           Submit

@@ -9,9 +9,10 @@ export default function handler(req, res) {
     }
 
   function server_status() {
-    const instance = 'mc-server';
-    const project = 'splendid-petal-379101';
-    const zone = 'us-east1-b';
+    const instance = process.env.INSTANCE;
+    const project = process.env.PROJECT;
+    const zone = process.env.ZONE;
+    
     console.log('start_server() begin');
 
     //Imports the Compute library
