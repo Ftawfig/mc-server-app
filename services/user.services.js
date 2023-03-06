@@ -3,10 +3,11 @@ import Router from 'next/router'
 export const userService = {
     login,
     logout,
+    create
 };
 
-const sendAuthData = async (formData) => {
-    return await fetch("/api/users/auth", {
+const sendAuthData = async (formData, endpoint) => {
+    return await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -24,7 +25,11 @@ const sendAuthData = async (formData) => {
 }
 
 function login(formData) {
-    return sendAuthData(formData);
+    return sendAuthData(formData, "/api/users/auth");
+}
+
+function create(formData) {
+    return sendAuthData(formData, "/api/users/create");
 }
 
 function logout() {

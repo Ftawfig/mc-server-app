@@ -34,7 +34,7 @@ const stopServer = async () => {
   console.log(data);
 };
 
-export default function Account({ serverStatus, email, firstName, lastName, role }) {  
+export default function Account({ serverStatus, email, first, last, role }) {  
   const router = useRouter();
   
   const refreshStatus = () => {  
@@ -72,7 +72,7 @@ export default function Account({ serverStatus, email, firstName, lastName, role
                     <Container className="login-container border rounded container-sm">
                         <h1>Account</h1>
                         <p><b>Logged in as:</b> {email} </p>
-                        <p><b>Name:</b> {firstName + " " + lastName} </p>
+                        <p><b>Name:</b> {first + " " + last} </p>
                         <p><b>Role:</b> {role} </p>
                         <p><b>Server status:</b> {serverStatus}</p>
                         <p><Link  href={"/logout"}>Logout</Link></p>
@@ -109,7 +109,7 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const { sub, email, firstName, lastName, role } = decoded;
+  const { sub, email, first, last, role } = decoded;
 
   const instance = process.env.INSTANCE;
   const project = process.env.PROJECT;
@@ -145,6 +145,6 @@ export const getServerSideProps = async (context) => {
   );
 
   return {
-    props: { serverStatus, email, firstName, lastName, role }
+    props: { serverStatus, email, first, last, role }
   }
 }

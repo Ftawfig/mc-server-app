@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
+import { dbService } from "../../../services/db.service";
 
 const secret = process.env.TOKEN_SECRET;
-
-// users in JSON file for simplicity, store in a db for production applications
-const users = require('/users.json');
 
 export function verifyToken(token) {
     try {
@@ -11,6 +9,27 @@ export function verifyToken(token) {
     } catch (err) {
         return
     }
+}
+
+export function createToken(user, expiry) {
+    // create a jwt token that is valid for 7 days
+    const token = jwt.sign({ 
+        sub: user.id,
+        email: user.email,
+        first: user.first,
+        last: user.last,
+        role: user.role
+    }, secret, { expiresIn: expiry });
+
+    // return  user details and token
+    return {
+        id: user.id,
+        email: user.email,
+        first: user.first,
+        last: user.last,
+        role: user.role,
+        token
+    };
 }
 
 export default function handler(req, res) {
@@ -22,44 +41,25 @@ export default function handler(req, res) {
 
     function authenticate() {
         const { email, password, remember_user } = req.body;
+        return dbService.getUser(email, password)
+            .then(user => {
 
-        //console.log(remember_user);
-        const user = users.find(u => u.email === email && u.password === password);
+                 //if user doesn't exist, rtuurn a 401 error with error message
+                 if (!user) {
+                    return res.status(401).json({
+                        status: 401,
+                        message: 'Email or password is incorrect!'
+                    });
+                }
 
-        //if user doesn't exist, reutnr a 401 error with error message
-        if (!user) {
-            return res.status(401).json({
-                status: 401,
-                message: 'Email or password is incorrect!'
+                let expiry = '1d';
+
+                if (remember_user) {
+                    expiry = '7d';
+                }
+
+                 // return  user details and token
+                 return res.status(200).json(createToken(user, expiry));
             });
-        }
-        
-       let expiry = '1d';
-
-       if (remember_user) {
-           expiry = '7d';
-           console.log(remember_user);
-       }
-
-       console.log(expiry);
-       
-        // create a jwt token that is valid for 7 days
-        const token = jwt.sign({ 
-            sub: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            role: user.role
-        }, secret, { expiresIn: expiry });
-
-        // return  user details and token
-        return res.status(200).json({
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            role: user.role,
-            token
-        });
     }
 }
