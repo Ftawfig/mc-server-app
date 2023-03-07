@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { useRouter } from 'next/router';
 import { verifyToken } from './api/users/auth';
 import Link from 'next/link';
+import Admin from './admin';
 
 const startServer = async () => {
   const response = await fetch("/api/start-server", {
@@ -34,7 +35,7 @@ const stopServer = async () => {
   console.log(data);
 };
 
-export default function Account({ serverStatus, email, first, last, role }) {  
+export default function Account({ serverStatus, email, first, last, role, ip1, approved}) {  
   const router = useRouter();
   
   const refreshStatus = () => {  
@@ -75,16 +76,22 @@ export default function Account({ serverStatus, email, first, last, role }) {
                         <p><b>Name:</b> {first + " " + last} </p>
                         <p><b>Role:</b> {role} </p>
                         <p><b>Server status:</b> {serverStatus}</p>
+                        <p><b>IP Address:</b> {ip1}</p>
+                        <p><b>Account Status:</b> {approved ? 'approved' : 'pending approval'}</p>
                         <p><Link  href={"/logout"}>Logout</Link></p>
-                        <Form>
-                          <Button variant="success" onClick={start} className="me-2">
-                            Start Server
-                          </Button>
-                          <Button variant="danger"  onClick={stop} >
-                            Stop Server
-                          </Button>
-                          
-                        </Form>
+                        {role == 'admin' &&
+                          <p><Link  href={"/admin"}>Admin</Link></p>
+                        }
+                        {approved &&
+                          <Form>
+                            <Button variant="success" onClick={start} className="me-2">
+                              Start Server
+                            </Button>
+                            <Button variant="danger"  onClick={stop} >
+                              Stop Server
+                            </Button>
+                          </Form>
+                        }
                     </Container>
                 </Col>
             </Row>
@@ -94,8 +101,9 @@ export default function Account({ serverStatus, email, first, last, role }) {
 }
 
 export const getServerSideProps = async (context) => {
+
   const token = context.req.cookies.auth_token;
-  
+
   const decoded = verifyToken(token)
   console.log(decoded);
 
@@ -109,7 +117,7 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const { sub, email, first, last, role } = decoded;
+  const { sub, email, first, last, role, ip1, approved } = decoded;
 
   const instance = process.env.INSTANCE;
   const project = process.env.PROJECT;
@@ -145,6 +153,6 @@ export const getServerSideProps = async (context) => {
   );
 
   return {
-    props: { serverStatus, email, first, last, role }
+    props: { serverStatus, email, first, last, role, ip1, approved }
   }
 }

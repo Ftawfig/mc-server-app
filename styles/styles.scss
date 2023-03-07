@@ -19,18 +19,23 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100vh;
-    max-height: 1080px;
+    height: 80vh;
+    max-height: 1000px;
     align-items: center;   
     background-image: url(../mc.png);
-    background-repeat: no-repeat;
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.35);
+    
+    /*Parallax effect*/
+    background-attachment: fixed;
     background-position: center;
-    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.33);
+    background-repeat: no-repeat;
+    background-size: cover;
+    
 }
 
 .hero-conent {
     position: relative;
-    top: 45%;
+    top: 45%;   
 }
 
 .hero h1 {

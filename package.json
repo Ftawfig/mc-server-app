@@ -3,6 +3,7 @@
     "@google-cloud/compute": "^3.8.1",
     "@google-cloud/functions-framework": "^3.0.0",
     "bootstrap": "^5.2.3",
+    "cookie-parser": "^1.4.6",
     "express-jwt": "^8.4.1",
     "firebase-admin": "^11.5.0",
     "next": "^13.2.1",

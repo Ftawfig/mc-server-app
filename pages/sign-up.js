@@ -19,6 +19,7 @@ export default function SignUp() {
     "last" : ""
   });
 
+  const [sucess, setSucess] = useState(false);
   const [error, setError] = useState(null);
 
   const handleChange = (event) => {
@@ -37,6 +38,7 @@ export default function SignUp() {
         setError(res.message);
       } else {
         document.cookie = `auth_token=${res.token}`
+        setSucess(true);
         router.push('/account');
       }
     });
@@ -54,6 +56,9 @@ export default function SignUp() {
                         <Alert variant="danger" show={error} >
                           Error: { error }
                         </Alert>
+                        <Alert variant="success" show={sucess} >
+                          Success. Redirecting...
+                        </Alert>
 
                         <Form.Group className="mb-3" controlId="email">
                           <Form.Control type="email" placeholder="Email" onChange={handleChange}/>
@@ -61,6 +66,9 @@ export default function SignUp() {
 
                         <Form.Group className="mb-3" controlId="password">
                           <Form.Control type="password" placeholder="Password" onChange={handleChange}/>
+                          <Form.Text className="text-muted">
+                            Warning! Passwords are currently stored in a plain text format. DO NOT use a password that you use for anything else. 
+                          </Form.Text>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="gamertag">

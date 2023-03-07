@@ -1,5 +1,6 @@
 const express = require('express');
 const next = require("next");
+const cookieParser = require('cookie-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost:3000';
@@ -14,8 +15,15 @@ app
     .then( () => {
         const server = express();
 
+        server.use(cookieParser());
+        
+
         //handle all requests via next.js requestHandler
         server.all('*', (req, res) => {
+            //get the client IP and store it in a cookie
+            const requestIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+            res.cookie('client_IP', requestIP);
+
             return handle(req, res);
         });
         

@@ -1,4 +1,3 @@
-
 export default function handler(req, res) {
     if (req.method === 'POST') {
       //Handle HTTP POST request
@@ -13,7 +12,7 @@ export default function handler(req, res) {
     const instance = process.env.INSTANCE;
     const project = process.env.PROJECT;
     const zone = process.env.ZONE;
-    
+
     console.log('start_server() begin');
 
     //Imports the Compute library

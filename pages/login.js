@@ -17,6 +17,7 @@ export default function Login() {
     "remember_user" : true
   });
 
+  const [sucess, setSucess] = useState(false);
   const [error, setError] = useState(null);
 
   const handleChange = (event) => {
@@ -41,6 +42,7 @@ export default function Login() {
         setError(res.message);
       } else {
         document.cookie = `auth_token=${res.token}`
+        setSucess(true);
         router.push('/account');
       }
     });
@@ -57,6 +59,10 @@ export default function Login() {
                         <Alert variant="danger" show={error} >
                           Error: { error }
                         </Alert>
+                        <Alert variant="success" show={sucess} >
+                          Success. Redirecting...
+                        </Alert>
+
                         <Form.Group className="mb-3" controlId="email" onChange={handleChange}>
                           <Form.Label>Email address</Form.Label>
                           <Form.Control type="email" placeholder="Enter email" />

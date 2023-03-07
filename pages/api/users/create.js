@@ -3,13 +3,16 @@ import { createToken } from "./auth";
 
 export default function handler(req, res) {
     if (req.method == 'POST') {
-        return createUser();
+        const requestIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+        console.log(`requestIP: ${requestIP}`);
+
+        return createUser(requestIP);
     } else { 
         return res.status(405).end(`Method ${req.method} Not Allowed`)
     }
 
-    function createUser() {
-        const userData = dbService.insert(req.body)
+    function createUser(requestIP) {
+        const userData = dbService.insert({...req.body, ["ip1"] : requestIP})
         .then(userData => {
             console.log(userData);
             return res.status(200).json(createToken(userData, '7d'));

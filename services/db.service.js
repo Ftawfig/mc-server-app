@@ -6,7 +6,9 @@ const serviceAccount = require('/splendid-petal-379101-6a79a2024c33.json');
 export const dbService = {
     insert,
     getAll,
-    getUser
+    getUser,
+    approveUser,
+    deleteUser
 };
 
 if (getApps().length < 1) {
@@ -24,7 +26,8 @@ async function insert(data) {
         password, 
         gamertag, 
         first, 
-        last 
+        last,
+        ip1
     } = data;
 
     collection.doc(email);
@@ -32,7 +35,6 @@ async function insert(data) {
      //if with this email already exists throw an error
     const user = await collection.where('email', '==', email).get(); 
 
-    console.log(user);
 
     if (!user.empty) {
         throw 'User already exists!';
@@ -49,14 +51,25 @@ async function insert(data) {
         'last' : last,
         'gamertag' : gamertag,
         'role' : 'user',
-        'sign-up-date': Date.now()
+        'sign-up-date': Date.now(),
+        'ip1' : ip1,
+        'approved' : false
     });
 
     return getUser(email, password);
 }
 
 async function getAll() {
-    return await collection.get();
+    const snapshot = await collection.get();
+    let users = {};
+
+    snapshot.forEach(doc => {
+        //console.log(doc.id, '=>', doc.data());
+        users = {...users, [doc.id] : doc.data()};
+    });
+
+    //console.log(users);
+    return users;
 }
 
 async function getUser(email, password) {
@@ -72,4 +85,13 @@ async function getUser(email, password) {
                 return null;
             }
         });
+}
+
+async function approveUser(id) {
+    console.log(db.doc('users/' + id));
+    return await db.doc('users/' + id).update({ 'approved' : true });
+}
+
+async function deleteUser(id) {
+    return await db.doc('users/' + id).delete();
 }

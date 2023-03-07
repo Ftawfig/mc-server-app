@@ -17,7 +17,7 @@ export default function Header() {
             <title>Fadi's Minecraft Server</title>
         </Head>
         <header>
-          <Navbar bg="light" expand="lg">
+          <Navbar bg="light" expand="lg" fixed="top">
             <Container className='header-nav'>
               <Navbar.Brand href="/">
                 <Image 

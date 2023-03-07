@@ -18,7 +18,9 @@ export function createToken(user, expiry) {
         email: user.email,
         first: user.first,
         last: user.last,
-        role: user.role
+        role: user.role,
+        ip1: user.ip1,
+        approved: user.approved,
     }, secret, { expiresIn: expiry });
 
     // return  user details and token
@@ -28,6 +30,8 @@ export function createToken(user, expiry) {
         first: user.first,
         last: user.last,
         role: user.role,
+        ip1: user.ip1,
+        approved: user.approved,
         token
     };
 }
