@@ -67,7 +67,7 @@ export default function SignUp() {
                         <Form.Group className="mb-3" controlId="password">
                           <Form.Control type="password" placeholder="Password" onChange={handleChange}/>
                           <Form.Text className="text-muted">
-                            Warning! Passwords are currently stored in a plain text format. DO NOT use a password that you use for anything else. 
+                            Warning! Passwords are currently stored in a plain text format. <b>DO NOT use a password that you use for anything else.</b> 
                           </Form.Text>
                         </Form.Group>
 

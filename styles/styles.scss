@@ -22,7 +22,7 @@
     height: 80vh;
     max-height: 1000px;
     align-items: center;   
-    background-image: url(../mc.png);
+    background-image: url(../public/mc.png);
     box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.35);
     
     /*Parallax effect*/
@@ -46,8 +46,13 @@
     margin-top: 25px;
     padding-bottom: 200px;
     text-align: center;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
+.main-content {
+    margin-bottom: 100px;
+}
 
 .home-btns {
     margin-top: 25px;
@@ -72,9 +77,30 @@
     color: black;
     border-color: black;
 }
+
 .hero-cta {
     background-color: rgb(42, 122, 172);
 }
+
+.features {
+    background: rgb(34,195,161);
+    background: linear-gradient(39deg, rgb(39, 230, 189) 0%, rgb(53, 8, 112) 100%);
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.features h2 {
+    color: white;
+}
+
+.main h2 {
+    margin-bottom: 50px;
+}
+
+.home-card:hover {
+    transform: scale(1.05);
+}
+
 
 footer {
     display: flex;
@@ -85,7 +111,8 @@ footer {
     bottom:  0;
     justify-content: center;
     align-items: center;
-    box-shadow: 2px -6px 5px 2px rgb(0 0 0 / 20%)
+    box-shadow: 2px -6px 5px 2px rgb(0 0 0 / 20%);
+    z-index: 2;
   }
 
   footer > span, footer a {

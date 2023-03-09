@@ -15,6 +15,7 @@ export default function Header() {
       <>
         <Head>
             <title>Fadi's Minecraft Server</title>
+            <link rel="icon" type="image/x-icon" href="../logo.png"></link>
         </Head>
         <header>
           <Navbar bg="light" expand="lg" fixed="top">
