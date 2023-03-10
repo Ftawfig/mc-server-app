@@ -1,4 +1,5 @@
 import { dbService } from "../../../services/db.service";
+import { createFirewallRule } from "../create-firewall-rule";
 
 export default function handler(req, res) {
     if (req.method == 'POST') {
@@ -10,9 +11,15 @@ export default function handler(req, res) {
     function approve() {
         console.log(req.body);
         const { id } = req.body;
-        return dbService.approveUser(id)
+        dbService.approveUser(id)
             .then(() => {
-                 return res.status(200);
-            });
+                return dbService.getUserById(id)
+                .then(userData => {
+                    console.log(userData);
+                    //create firewall rules for user's IP addresses 
+                    return createFirewallRule(Object.keys(userData).gamertag, userData.ip1, userData.ip2, res);
+                });
+                
+            });        
     }
 }

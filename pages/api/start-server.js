@@ -37,37 +37,11 @@ export default function handler(req, res) {
       console.log(response);
       console.log('Server started successfully');
     }
-    
-    //Create firewall rule
-    const firewallResource = {};
-    
-    createFirewall(firewallResource, project);
-  
+
     callStart();
 
     return res.status(200).json({
       success : true
     });
-  }
-  
-  function createFirewall(firewallResource, project) {
-      const {FirewallsClient} = require('@google-cloud/compute').v1;
-    
-      // Instantiates a client
-      const computeClient = new FirewallsClient();
-    
-      async function callInsert() {
-        // Construct request
-        const request = {
-          firewallResource,
-          project,
-        };
-    
-        // Run request
-        const response = await computeClient.insert(request);
-        console.log(response);
-      }
-    
-      callInsert();
   }
 }

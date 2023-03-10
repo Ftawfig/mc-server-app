@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 import { dbService } from "../../../services/db.service";
+import { createFirewallRule } from "../create-firewall-rule";
 
 const secret = process.env.TOKEN_SECRET;
 
@@ -20,6 +21,7 @@ export function createToken(user, expiry) {
         last: user.last,
         role: user.role,
         ip1: user.ip1,
+        ip2: user.ip2,
         approved: user.approved,
     }, secret, { expiresIn: expiry });
 
@@ -31,6 +33,7 @@ export function createToken(user, expiry) {
         last: user.last,
         role: user.role,
         ip1: user.ip1,
+        ip2: user.ip2,
         approved: user.approved,
         token
     };

@@ -7,6 +7,7 @@ export const dbService = {
     insert,
     getAll,
     getUser,
+    getUserById,
     approveUser,
     deleteUser
 };
@@ -53,6 +54,7 @@ async function insert(data) {
         'role' : 'user',
         'sign-up-date': Date.now(),
         'ip1' : ip1,
+        'ip2' : ip2,
         'approved' : false
     });
 
@@ -72,6 +74,7 @@ async function getAll() {
     return users;
 }
 
+//get user by email & pw
 async function getUser(email, password) {
     return await collection
         .where("email", "==", email)
@@ -87,11 +90,22 @@ async function getUser(email, password) {
         });
 }
 
+//get user by Id
+async function getUserById(id) {
+    return (await db.doc('users/' + id).get()).data();
+}
+
 async function approveUser(id) {
-    console.log(db.doc('users/' + id));
     return await db.doc('users/' + id).update({ 'approved' : true });
 }
 
 async function deleteUser(id) {
     return await db.doc('users/' + id).delete();
+}
+
+async function updateUserIPs(id, ip1, ip2) {
+    return await db.doc('users/' + id).update({ 
+        "ip1" : ip1,
+        "ip2" : ip2
+    });
 }

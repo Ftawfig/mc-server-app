@@ -32,13 +32,16 @@ export default function handler(req, res) {
       //Run request
       const response = await computeClient.get(request);
 
-      return response.status; 
-    }
-  
-    const status = callGet();
+      const serverInfo = {
+        status: response.status,
+        ip: response.networkInterfaces[0].networkIP
+      };
 
-    return res.status(200).json({
-      status : status
-    });
+      return response;
+    }
+
+    const serverInfo = callGet();
+
+    return res.status(200).json(serverInfo);
   }
 }

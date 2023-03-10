@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col';
 import { useRouter } from 'next/router';
 import { verifyToken } from './api/users/auth';
 import Link from 'next/link';
-import Admin from './admin';
 
 const startServer = async () => {
   const response = await fetch("/api/start-server", {
@@ -35,7 +34,7 @@ const stopServer = async () => {
   console.log(data);
 };
 
-export default function Account({ serverStatus, email, first, last, role, ip1, approved}) {  
+export default function Account({ serverInfo, email, first, last, role, ip1, ip2, approved}) {  
   const router = useRouter();
   
   const refreshStatus = () => {  
@@ -65,24 +64,71 @@ export default function Account({ serverStatus, email, first, last, role, ip1, a
     refreshStatus();
   }
 
+  const [formData, setFormData] = useState({
+    "ip1" : "",
+    "ip2" : "",
+  });
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleSubmit = () => {
+    event.preventDefault();
+
+    console.log(formData);
+    
+    //TODO - add validation later
+    const response = userService.login(formData).then((res) => {
+      if (res.status == 401) {
+        setError(res.message);
+      } else {
+        document.cookie = `auth_token=${res.token}`
+        setSucess(true);
+        router.push('/account');
+      }
+    });
+  };
+
   return (
       <>
-        <Container >
+        <Container className="account-page">
             <Row >
                 <Col lg={6} md={6} xs={12}>
-                    <Container className="login-container border rounded container-sm">
-                        <h1>Account</h1>
+                    <h1>Account</h1>
+                    <Container className="login-container border rounded container-sm">    
+                        <h2>Account Info</h2>
                         <p><b>Logged in as:</b> {email} </p>
                         <p><b>Name:</b> {first + " " + last} </p>
                         <p><b>Role:</b> {role} </p>
-                        <p><b>Server status:</b> {serverStatus}</p>
-                        <p><b>IP Address:</b> {ip1}</p>
+                        <Form>
+                          <Form.Group className="mb-3" controlId="ip1" onChange={handleChange}>
+                            <Form.Label><b>IP Address #1:</b></Form.Label>
+                            <Form.Control type="text" placeholder={ip1} />
+                          </Form.Group>
+                          <Form.Group className="mb-3" controlId="ip2" onChange={handleChange}>
+                            <Form.Label><b>IP Address #2:</b></Form.Label>
+                            <Form.Control type="text" placeholder={ip2} />
+                          </Form.Group>
+                          <Button className="mb-3" variant="primary" type="submit" onClick={handleSubmit}>
+                            Update IP Addresses
+                          </Button>
+                        </Form>
                         <p><b>Account Status:</b> {approved ? 'approved' : 'pending approval'}</p>
                         <p><Link  href={"/logout"}>Logout</Link></p>
                         {role == 'admin' &&
                           <p><Link  href={"/admin"}>Admin</Link></p>
                         }
+                      </Container>
+                        
                         {approved &&
+                        <Container className="login-container border rounded container-sm">  
+                          <h2>Server Info</h2>
+                          <p><b>Server status:</b> {serverInfo.status}</p>
+                          <p><b>Server IP Address:</b> 35.211.152.249</p>
+                          <p><b>Last Start Time:</b> {serverInfo.lastStartTimestamp}</p>
+                          <p><b>Last Stop Time:</b> {serverInfo.lastStopTimestamp}</p>
                           <Form>
                             <Button variant="success" onClick={start} className="me-2">
                               Start Server
@@ -91,8 +137,8 @@ export default function Account({ serverStatus, email, first, last, role, ip1, a
                               Stop Server
                             </Button>
                           </Form>
+                          </Container>
                         }
-                    </Container>
                 </Col>
             </Row>
         </Container>
@@ -117,7 +163,7 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const { sub, email, first, last, role, ip1, approved } = decoded;
+  const { sub, email, first, last, role, ip1, ip2, approved } = decoded;
 
   const instance = process.env.INSTANCE;
   const project = process.env.PROJECT;
@@ -141,18 +187,16 @@ export const getServerSideProps = async (context) => {
     //Run request
     const response = await computeClient.get(request);
 
-    console.log(response[0].status);
-
-    return response[0].status; 
+    return response[0]; 
   }
 
-  const serverStatus = await callGet().then(
+  const serverInfo = await callGet().then(
     (response) => {
       return response;
     }
   );
 
   return {
-    props: { serverStatus, email, first, last, role, ip1, approved }
-  }
+    props: { serverInfo, email, first, last, role, ip1, ip2, approved }
+  };
 }

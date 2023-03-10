@@ -85,3 +85,7 @@ function approve(id) {
 function remove(id) {
     return deleteUser(id);
 }
+
+function updateIPs(id, formData) {
+    return 
+}
