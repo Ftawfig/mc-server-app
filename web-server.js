@@ -3,8 +3,8 @@ const next = require("next");
 const cookieParser = require('cookie-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = 'localhost:3000';
-const PORT = 3000;
+const hostname = 'localhost:8080';
+const PORT = 8080;
 
 const app = next({ dev, hostname, PORT });
 const handle = app.getRequestHandler();
@@ -16,7 +16,6 @@ app
         const server = express();
 
         server.use(cookieParser());
-        
 
         //handle all requests via next.js requestHandler
         server.all('*', (req, res) => {

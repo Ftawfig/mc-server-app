@@ -4,14 +4,7 @@ export default function ProjectInfo() {
             <h2>Project Info</h2>
             <div className="description">
                 <h3>Description: </h3>
-                <span>
-                    Minecraft Bedrock Server. <br/><br/>Features three game modes:
-                </span>
-                <ul>
-                    <li>Same-screen multiplayer</li>
-                    <li>Real-time online multiplayer</li>
-                    <li>Singleplayer vs. "AI" (not really AI)</li>
-                </ul>
+                    Minecraft Bedrock Server. 
             </div>
             <br/>
             <div className="info-wrapper">
@@ -25,7 +18,10 @@ export default function ProjectInfo() {
                     <li>Node.js</li>
                     <li>Next.js</li>
                     <li>Express</li>
-                    <li>Socket.IO</li>
+                </ul>
+                <h3>Database: </h3> 
+                <ul>
+                    <li>Firebase</li>
                 </ul>
                 <h3>Build/Deploy: </h3> 
                 <ul>
@@ -35,9 +31,13 @@ export default function ProjectInfo() {
                 <ul>
                     <li>Google Cloud Run</li>
                 </ul>
+                <h3>Game Server: </h3> 
+                <ul>
+                    <li>Google Compute Engine Ubuntu VM</li>
+                </ul>
                 <h3>Repo:</h3> 
                 <ul>
-                    <li><a href="https://github.com/Ftawfig/react-tic-tac-toe">Github</a></li>
+                    <li><a href="https://github.com/Ftawfig/mc-server-app">Github</a></li>
                 </ul>
             </div>
         </div>

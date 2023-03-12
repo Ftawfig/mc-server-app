@@ -17,7 +17,7 @@ export default function handler(req, res) {
                 .then(userData => {
                     console.log(userData);
                     //create firewall rules for user's IP addresses 
-                    return createFirewallRule(Object.keys(userData).gamertag, userData.ip1, userData.ip2, res);
+                    return createFirewallRule(id, userData.ip1, userData.ip2, res);
                 });
                 
             });        

@@ -27,14 +27,11 @@ export default function Login() {
 
   const handleCheck = (event) => {
     const checked = event.target.checked;
-    console.log(checked);
     setFormData({ ...formData, "remember_user": checked });
   };
   
   const handleSubmit = () => {
     event.preventDefault();
-
-    console.log(formData);
     
     //TODO - add validation later
     const response = userService.login(formData).then((res) => {

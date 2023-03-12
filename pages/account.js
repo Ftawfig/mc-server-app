@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useRouter } from 'next/router';
 import { verifyToken } from './api/users/auth';
+import { userService } from '../services/user.services';
 import Link from 'next/link';
 
 const startServer = async () => {
@@ -18,7 +19,6 @@ const startServer = async () => {
   });
 
   const data = await response.json();
-  console.log(data);
 };
 
 const stopServer = async () => {
@@ -31,10 +31,9 @@ const stopServer = async () => {
   });
 
   const data = await response.json();
-  console.log(data);
 };
 
-export default function Account({ serverInfo, email, first, last, role, ip1, ip2, approved}) {  
+export default function Account({ sub, serverInfo, email, first, last, role, ip1, ip2, approved}) {  
   const router = useRouter();
   
   const refreshStatus = () => {  
@@ -65,8 +64,8 @@ export default function Account({ serverInfo, email, first, last, role, ip1, ip2
   }
 
   const [formData, setFormData] = useState({
-    "ip1" : "",
-    "ip2" : "",
+    "ip1" : ip1,
+    "ip2" : ip2,
   });
 
   const handleChange = (event) => {
@@ -78,14 +77,12 @@ export default function Account({ serverInfo, email, first, last, role, ip1, ip2
     event.preventDefault();
 
     console.log(formData);
-    
-    //TODO - add validation later
-    const response = userService.login(formData).then((res) => {
+
+    const response = userService.update(sub, formData).then((res) => {
       if (res.status == 401) {
         setError(res.message);
       } else {
         document.cookie = `auth_token=${res.token}`
-        setSucess(true);
         router.push('/account');
       }
     });
@@ -100,21 +97,24 @@ export default function Account({ serverInfo, email, first, last, role, ip1, ip2
                     <Container className="login-container border rounded container-sm">    
                         <h2>Account Info</h2>
                         <p><b>Logged in as:</b> {email} </p>
+                        <p><b>User ID:</b> {sub} </p>
                         <p><b>Name:</b> {first + " " + last} </p>
                         <p><b>Role:</b> {role} </p>
-                        <Form>
-                          <Form.Group className="mb-3" controlId="ip1" onChange={handleChange}>
-                            <Form.Label><b>IP Address #1:</b></Form.Label>
-                            <Form.Control type="text" placeholder={ip1} />
-                          </Form.Group>
-                          <Form.Group className="mb-3" controlId="ip2" onChange={handleChange}>
-                            <Form.Label><b>IP Address #2:</b></Form.Label>
-                            <Form.Control type="text" placeholder={ip2} />
-                          </Form.Group>
-                          <Button className="mb-3" variant="primary" type="submit" onClick={handleSubmit}>
-                            Update IP Addresses
-                          </Button>
-                        </Form>
+                        {approved &&
+                          <Form>
+                            <Form.Group className="mb-3" controlId="ip1" onChange={handleChange}>
+                              <Form.Label><b>IP Address #1:</b></Form.Label>
+                              <Form.Control type="text" placeholder={ip1} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="ip2" onChange={handleChange}>
+                              <Form.Label><b>IP Address #2:</b></Form.Label>
+                              <Form.Control type="text" placeholder={ip2} />
+                            </Form.Group>
+                            <Button className="mb-3" variant="primary" type="submit" onClick={handleSubmit}>
+                              Update IP Addresses
+                            </Button>
+                          </Form>
+                        }
                         <p><b>Account Status:</b> {approved ? 'approved' : 'pending approval'}</p>
                         <p><Link  href={"/logout"}>Logout</Link></p>
                         {role == 'admin' &&
@@ -197,6 +197,6 @@ export const getServerSideProps = async (context) => {
   );
 
   return {
-    props: { serverInfo, email, first, last, role, ip1, ip2, approved }
+    props: { sub, serverInfo, email, first, last, role, ip1, ip2, approved }
   };
 }

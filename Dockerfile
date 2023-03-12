@@ -19,7 +19,6 @@ RUN npm install
 COPY . ./
 
 # Run the web service on container startup.
-CMD node server_functions.js
+CMD node web-server.js
 
-EXPOSE 19132-19133/udp
-EXPOSE 19132-19133/tcp
+EXPOSE 8080

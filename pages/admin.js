@@ -25,8 +25,9 @@ function TableRows({ users }) {
                 <td>{ user.email }</td>
                 <td>{ user.first }</td>
                 <td>{ user.last }</td>
-                <td>{ user.ip1 }</td>
                 <td>{ user.gamertag }</td>
+                <td>{ user.ip1 }</td>
+                <td>{ user.ip2 }</td>
                 <td>{ user.approved.toString() }</td>
                 <td>{ user.role }</td>
                 <td>{ new Date(user['sign-up-date']).toDateString()}</td>
@@ -86,6 +87,7 @@ export default function Admin() {
                           <th>last</th>
                           <th>gamertag</th>
                           <th>ip1</th>
+                          <th>ip2</th>
                           <th>approved</th>
                           <th>role</th>
                           <th>sign-up-date</th>

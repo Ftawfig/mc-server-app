@@ -6,6 +6,7 @@ export const userService = {
     create,
     getAll,
     approve,
+    update,
     remove
 };
 
@@ -41,6 +42,23 @@ const approveUser = async (id) => {
     return await fetch("/api/users/approve", {
         method: "POST",
         body: JSON.stringify(id),
+        headers: {
+          "Content-Type": "application/json",
+        },
+    }).then(response => {
+        return response;
+    });  
+};
+
+const updateIPs = async (id, formData) => {
+    const requestBody = {
+        id: id,
+        ip1: formData.ip1,
+        ip2: formData.ip2        
+    }
+    return await fetch("/api/users/update-ip", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,6 +104,6 @@ function remove(id) {
     return deleteUser(id);
 }
 
-function updateIPs(id, formData) {
-    return 
+function update(id, formData) {
+    return updateIPs(id, formData);
 }

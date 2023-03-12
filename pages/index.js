@@ -21,7 +21,7 @@ function Home() {
         <Container fluid className='main'>
             <Container className='main-content' >
               <h2>Minecraft Bedrock Server</h2>
-              <p>Bedrock minecraft server hosted on GCP VM with automated start-up/shutdown. Users must sign up and be approved.</p>
+              <p>Bedrock minecraft server. Running on Ubuntu VM hosted on Goocle Cloud Platform's Compute Engine. Server start-up/shutdown can be managed by approved users via React/NextJS web app and Compute Engine API for Node.js. Admin user can approve/ban sign-ed up users for server access and VPC firewall rules are automatically created for approved users. </p>
             </Container> 
             <Container fluid className='features'>
               <Container className='home-cards'>

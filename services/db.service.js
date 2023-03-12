@@ -9,6 +9,7 @@ export const dbService = {
     getUser,
     getUserById,
     approveUser,
+    updateUserIPs,
     deleteUser
 };
 
@@ -54,7 +55,7 @@ async function insert(data) {
         'role' : 'user',
         'sign-up-date': Date.now(),
         'ip1' : ip1,
-        'ip2' : ip2,
+        'ip2' : "",
         'approved' : false
     });
 
@@ -82,7 +83,11 @@ async function getUser(email, password) {
         .get()
         .then(querySnapshot => {
             if(!querySnapshot.empty) {
-                const user = querySnapshot.docs[0].data();
+                const user = { 
+                    id: querySnapshot.docs[0].id, 
+                    data: querySnapshot.docs[0].data()
+                };
+
                 return user;
             } else {
                 return null;

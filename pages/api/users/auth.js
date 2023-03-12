@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 import { dbService } from "../../../services/db.service";
-import { createFirewallRule } from "../create-firewall-rule";
 
 const secret = process.env.TOKEN_SECRET;
 
@@ -16,25 +15,25 @@ export function createToken(user, expiry) {
     // create a jwt token that is valid for 7 days
     const token = jwt.sign({ 
         sub: user.id,
-        email: user.email,
-        first: user.first,
-        last: user.last,
-        role: user.role,
-        ip1: user.ip1,
-        ip2: user.ip2,
-        approved: user.approved,
+        email: user.data.email,
+        first: user.data.first,
+        last: user.data.last,
+        role: user.data.role,
+        ip1: user.data.ip1,
+        ip2: user.data.ip2,
+        approved: user.data.approved,
     }, secret, { expiresIn: expiry });
 
-    // return  user details and token
+    // return user details and token
     return {
         id: user.id,
-        email: user.email,
-        first: user.first,
-        last: user.last,
-        role: user.role,
-        ip1: user.ip1,
-        ip2: user.ip2,
-        approved: user.approved,
+        email: user.data.email,
+        first: user.data.first,
+        last: user.data.last,
+        role: user.data.role,
+        ip1: user.data.ip1,
+        ip2: user.data.ip2,
+        approved: user.data.approved,
         token
     };
 }
@@ -64,6 +63,8 @@ export default function handler(req, res) {
                 if (remember_user) {
                     expiry = '7d';
                 }
+                
+                console.log(user);
 
                  // return  user details and token
                  return res.status(200).json(createToken(user, expiry));
