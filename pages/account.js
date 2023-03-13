@@ -103,11 +103,11 @@ export default function Account({ sub, serverInfo, email, first, last, role, ip1
                         {approved &&
                           <Form>
                             <Form.Group className="mb-3" controlId="ip1" onChange={handleChange}>
-                              <Form.Label><b>IP Address #1:</b></Form.Label>
+                              <Form.Label><b>IPv4 Address #1:</b></Form.Label>
                               <Form.Control type="text" placeholder={ip1} />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="ip2" onChange={handleChange}>
-                              <Form.Label><b>IP Address #2:</b></Form.Label>
+                              <Form.Label><b>IPv4 Address #2:</b></Form.Label>
                               <Form.Control type="text" placeholder={ip2} />
                             </Form.Group>
                             <Button className="mb-3" variant="primary" type="submit" onClick={handleSubmit}>
@@ -126,7 +126,9 @@ export default function Account({ sub, serverInfo, email, first, last, role, ip1
                         <Container className="login-container border rounded container-sm">  
                           <h2>Server Info</h2>
                           <p><b>Server status:</b> {serverInfo.status}</p>
-                          <p><b>Server IP Address:</b> 35.211.152.249</p>
+                          <p><b>Server Address:</b> mc.faditawfig.com</p>
+                          <p><b>Server Port:</b> 19132</p>
+                          <p><b>Server IP:</b> 35.211.152.249</p>
                           <p><b>Last Start Time:</b> {serverInfo.lastStartTimestamp}</p>
                           <p><b>Last Stop Time:</b> {serverInfo.lastStopTimestamp}</p>
                           <Form>

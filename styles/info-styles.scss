@@ -11,8 +11,8 @@
     box-shadow: 5px 5px 5px #00000033;
     max-width: 800px;
     margin: auto;
-    padding-top: 150px;
-    padding-bottom: 300px;
+    padding-top: 100px;
+    padding-bottom: 125px;
   }
 
   .info-wrapper {
@@ -33,6 +33,10 @@
     text-align: left;
     font-size: 45px;
     font-weight: 700;
+  }
+
+  .info-page h3 {
+    font-size: 18px;
   }
 
   .info-page ul {

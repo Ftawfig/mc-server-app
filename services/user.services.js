@@ -20,9 +20,7 @@ const sendAuthData = async (formData, endpoint) => {
     }).then((response) => {
         return response.json()
     }).then((response) => {
-        if (response.status != 200) {
-            localStorage.setItem('user', JSON.stringify(response));
-        }
+        localStorage.setItem('user', JSON.stringify(response));
 
         return response;
     });

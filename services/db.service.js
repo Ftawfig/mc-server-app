@@ -1,7 +1,7 @@
 const { getApps, initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 
-const serviceAccount = require('/splendid-petal-379101-6a79a2024c33.json');
+const serviceAccount = process.env.GOOLGE_APPLICATION_CREDENTIALS;
 
 export const dbService = {
     insert,
@@ -37,7 +37,6 @@ async function insert(data) {
      //if with this email already exists throw an error
     const user = await collection.where('email', '==', email).get(); 
 
-
     if (!user.empty) {
         throw 'User already exists!';
     }
@@ -59,7 +58,7 @@ async function insert(data) {
         'approved' : false
     });
 
-    return getUser(email, password);
+    return await getUser(email, password);
 }
 
 async function getAll() {
@@ -67,11 +66,9 @@ async function getAll() {
     let users = {};
 
     snapshot.forEach(doc => {
-        //console.log(doc.id, '=>', doc.data());
         users = {...users, [doc.id] : doc.data()};
     });
 
-    //console.log(users);
     return users;
 }
 

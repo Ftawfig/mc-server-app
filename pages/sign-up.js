@@ -29,14 +29,14 @@ export default function SignUp() {
 
   const handleSubmit = () => {
     event.preventDefault();
-
-    console.log(formData);
     
     //TODO - add validation later
     const response = userService.create(formData).then((res) => {
       if (res.status == 401) {
         setError(res.message);
       } else {
+        console.log(res);
+        console.log(res.message);
         document.cookie = `auth_token=${res.token}`
         setSucess(true);
         router.push('/account');

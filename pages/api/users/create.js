@@ -12,16 +12,23 @@ export default function handler(req, res) {
     }
 
     function createUser(requestIP) {
-        const userData = dbService.insert({...req.body, ["ip1"] : requestIP})
-        .then(userData => {
-            console.log(userData);
-            return res.status(200).json(createToken(userData, '7d'));
+        const {email, password} = req.body;
+
+        return dbService.insert({...req.body, ["ip1"] : requestIP})
+        .then(response => {
+            return dbService.getUser(email, password).then(userData => {
+                console.log(`userData from dbService.insert: ${userData}`);
+                console.log(userData);
+                return res.status(200).json(createToken(userData, '7d'));
+            })
+            .catch(e => {
+                console.log(e);
+                
+                return res.status(401).json({
+                    status: 401,
+                    message: e
+                }); 
+            });
         })
-        .catch(e => {
-            return res.status(401).json({
-                status: 401,
-                message: e
-            }); 
-        });
     }
 }

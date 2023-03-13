@@ -48,7 +48,6 @@ function TableRows({ users }) {
 
 export default function Admin() {
     const { user } = getUserContext();
-    console.log(user);
     const [users, setUsers] = useState(null);
 
     const get = () => {

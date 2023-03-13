@@ -12,6 +12,8 @@ export function verifyToken(token) {
 }
 
 export function createToken(user, expiry) {
+    console.log(`createToken() - UserData: `);
+    console.log(user);
     // create a jwt token that is valid for 7 days
     const token = jwt.sign({ 
         sub: user.id,
@@ -67,6 +69,7 @@ export default function handler(req, res) {
                 console.log(user);
 
                  // return  user details and token
+                 console.log(user);
                  return res.status(200).json(createToken(user, expiry));
             });
     }
