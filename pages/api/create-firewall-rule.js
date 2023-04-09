@@ -1,40 +1,68 @@
 const compute = require('@google-cloud/compute');
 const computeProtos = compute.protos.google.cloud.compute.v1;
 
-export default function handler(req, res) {
-    if (req.method === 'POST') {
-      //Handle HTTP POST request
-      console.log('calling start_server()');
+//export default function handler(req, res) {
+//    if (req.method === 'POST') {
+//      //Handle HTTP POST request
+//      console.log('calling start_server()');
+//
+//      const { ip1, ip2 } = req.body;
+//
+//      return create_firewall_rule(ip1, ip2, res);
+//    } else {
+//      //Handle any other HTTP method
+//      return res.status(405).end(`Method ${req.method} Not Allowed`)
+//    }
+//}
 
-      const { ip1, ip2 } = req.body;
-
-      return create_firewall_rule(ip1, ip2, res);
-    } else {
-      //Handle any other HTTP method
-      return res.status(405).end(`Method ${req.method} Not Allowed`)
-    }
-}
-
-export async function createFirewallRule(id, ip1, ip2, res) {
-    const projectId = process.env.PROJECT;
-    const firewallsClient = new compute.FirewallsClient();
-    const operationsClient = new compute.GlobalOperationsClient();  
-
+export async function createRules(id, ip1, ip2, res) {
     //check that each IP is valid, if so push it to the ranges array
     const ips = [ip1, ip2];
-    const ranges = [];
+    const ipv4s = [];
+    const ipv6s = [];
 
     let ipv4_regex = /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/;   
+    let ipv6_regex =/(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/;
 
     ips.forEach(ip => {
         if (ipv4_regex.test(ip)) {
-            ranges.push(ip);
+            ipv4s.push(ip);
             console.log(`${ip} is valid!`)
         } else {
             console.log(`${ip} is not valid!`)
         }
     })
-    
+
+    ips.forEach(ip => {
+        if (ipv6_regex.test(ip)) {
+            ipv6s.push(ip);
+            console.log(`${ip} is valid!`)
+        } else {
+            console.log(`${ip} is not valid!`)
+        }
+    })
+
+    if (ipv4s.length > 0 && ipv6s.length > 0) {
+        return {
+            ipv4Res: await createFirewallRule(id, ipv4s, res, 'ipv4'),
+            ipv6Res: await createFirewallRule(id, ipv6s, res, 'ipv6')
+        }
+    } else if (ipv4s.length > 0) {
+        return {
+            ipv4Res: await createFirewallRule(id, ipv4s, res, 'ipv4'),
+        }
+    } else if (ipv6s.length > 0) {
+        return {
+            ipv6Res: await createFirewallRule(id, ipv6s, res, 'ipv6')
+        }
+    }
+}
+
+export async function createFirewallRule(id, ranges, res, ipType) {
+    const projectId = process.env.PROJECT;
+    const firewallsClient = new compute.FirewallsClient();
+    const operationsClient = new compute.GlobalOperationsClient();  
+
     console.log(`ranges.length: ${ranges.length}`)
 
     //if there are no valid IPs, return with error status
@@ -44,7 +72,7 @@ export async function createFirewallRule(id, ip1, ip2, res) {
 
     const firewallRule = new computeProtos.Firewall();
 
-    firewallRule.name = "allow-" + id.toLowerCase();
+    firewallRule.name = "allow-" + ipType + "-" + id.toLowerCase();
     firewallRule.direction = 'INGRESS';
     firewallRule.allowed = [
         {

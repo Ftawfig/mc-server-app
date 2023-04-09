@@ -103,16 +103,19 @@ export default function Account({ sub, serverInfo, email, first, last, role, ip1
                         {approved &&
                           <Form>
                             <Form.Group className="mb-3" controlId="ip1" onChange={handleChange}>
-                              <Form.Label><b>IPv4 Address #1:</b></Form.Label>
+                              <Form.Label><b>IP Address #1:</b></Form.Label>
                               <Form.Control type="text" placeholder={ip1} />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="ip2" onChange={handleChange}>
-                              <Form.Label><b>IPv4 Address #2:</b></Form.Label>
+                              <Form.Label><b>IP Address #2:</b></Form.Label>
                               <Form.Control type="text" placeholder={ip2} />
                             </Form.Group>
                             <Button className="mb-3" variant="primary" type="submit" onClick={handleSubmit}>
                               Update IP Addresses
                             </Button>
+                            <Form.Text id="ipHelpBlock" muted style={{ "margin-left" : "15px" }}>
+                                <a href="https://www.google.com/search?q=myip" target="_blank">I don't know my IP address</a>
+                            </Form.Text>
                           </Form>
                         }
                         <p><b>Account Status:</b> {approved ? 'approved' : 'pending approval'}</p>
