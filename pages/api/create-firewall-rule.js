@@ -77,11 +77,11 @@ export async function createFirewallRule(id, ranges, res, ipType) {
     firewallRule.allowed = [
         {
             IPProtocol: 'udp',
-            ports: [19132, 19133]
+            ports: [2456, 2457, 19132, 19133]
         },
         {
             IPProtocol: 'tcp',
-            ports: [19132, 19133]
+            ports: [2456, 2457,19132, 19133]
         }
     ];
     firewallRule.priority = 0;

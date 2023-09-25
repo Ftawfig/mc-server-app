@@ -14,12 +14,9 @@ export default function SignUp() {
   const [formData, setFormData] = useState({
     "email" : "",
     "password" : "",
-    "gamertag" : "",
     "first" : "",
     "last" : ""
-  });
-
-  const [sucess, setSucess] = useState(false);
+  });  const [sucess, setSucess] = useState(false);
   const [error, setError] = useState(null);
 
   const handleChange = (event) => {
@@ -37,7 +34,7 @@ export default function SignUp() {
       } else {
         console.log(res);
         console.log(res.message);
-        document.cookie = `auth_token=${res.token}`
+        document.cookie = `auth_token=${res.token}`;
         setSucess(true);
         router.push('/account');
       }
@@ -71,9 +68,6 @@ export default function SignUp() {
                           </Form.Text>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="gamertag">
-                          <Form.Control type="text" placeholder="Gamertag" onChange={handleChange}/>
-                        </Form.Group>
 
                         <Form.Group className="mb-3" controlId="first">
                           <Form.Control type="text" placeholder="First Name" onChange={handleChange}/>

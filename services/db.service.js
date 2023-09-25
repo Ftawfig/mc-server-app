@@ -26,7 +26,6 @@ async function insert(data) {
     const { 
         email, 
         password, 
-        gamertag, 
         first, 
         last,
         ip1
@@ -50,7 +49,6 @@ async function insert(data) {
         'password' : password,
         'first' : first,
         'last' : last,
-        'gamertag' : gamertag,
         'role' : 'user',
         'sign-up-date': Date.now(),
         'ip1' : ip1,

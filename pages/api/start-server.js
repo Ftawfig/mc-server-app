@@ -9,11 +9,12 @@ export default function handler(req, res) {
     }
 
   function start_server() {
-    const instance = process.env.INSTANCE;
+    //const instance = process.env.INSTANCE;
+    const {instance} = req.body;
     const project = process.env.PROJECT;
     const zone = process.env.ZONE;
 
-    console.log('start_server() begin');
+    console.log('start_server() begin. instance: ' + instance + ', project: ' + project + ', zone: ' + zone + '');
 
     //Imports the Compute library
     const {InstancesClient} = require('@google-cloud/compute').v1;

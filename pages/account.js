@@ -9,10 +9,10 @@ import { verifyToken } from './api/users/auth';
 import { userService } from '../services/user.services';
 import Link from 'next/link';
 
-const startServer = async () => {
+const startServer = async (instance) => {
   const response = await fetch("/api/start-server", {
     method: "POST",
-    body: JSON.stringify({"test" : "test"}),
+    body: JSON.stringify({"instance" : instance}),
     headers: {
       "Content-Type": "application/json",
     },
@@ -21,10 +21,10 @@ const startServer = async () => {
   const data = await response.json();
 };
 
-const stopServer = async () => {
+const stopServer = async (instance) => {
   const response = await fetch("/api/stop-server", {
     method: "POST",
-    body: JSON.stringify({"test" : "test"}),
+    body: JSON.stringify({"instance" : instance}),
     headers: {
       "Content-Type": "application/json",
     },
@@ -33,7 +33,7 @@ const stopServer = async () => {
   const data = await response.json();
 };
 
-export default function Account({ sub, serverInfo, email, first, last, role, ip1, ip2, approved}) {  
+export default function Account({ sub, mcServerInfo, vhServerInfo, email, first, last, role, ip1, ip2, approved}) {  
   const router = useRouter();
   
   const refreshStatus = () => {  
@@ -54,12 +54,12 @@ export default function Account({ sub, serverInfo, email, first, last, role, ip1
     }, 30000);
   }
 
-  const start = () => {
-    startServer();
+  const start = (instance) => {
+    startServer(instance);
     refreshStatus();
   }
-  const stop = () => {
-    stopServer();
+  const stop = (instance) => {
+    stopServer(instance);
     refreshStatus();
   }
 
@@ -124,21 +124,41 @@ export default function Account({ sub, serverInfo, email, first, last, role, ip1
                           <p><Link  href={"/admin"}>Admin</Link></p>
                         }
                       </Container>
-                        
+
                         {approved &&
                         <Container className="login-container border rounded container-sm">  
-                          <h2>Server Info</h2>
-                          <p><b>Server status:</b> {serverInfo.status}</p>
+                          <h2>Minecraft Server Info</h2>
+                          <p><b>Server status:</b> {mcServerInfo.status}</p>
                           <p><b>Server Address:</b> mc.faditawfig.com</p>
                           <p><b>Server Port:</b> 19132</p>
                           <p><b>Server IP:</b> 35.211.152.249</p>
-                          <p><b>Last Start Time:</b> {serverInfo.lastStartTimestamp}</p>
-                          <p><b>Last Stop Time:</b> {serverInfo.lastStopTimestamp}</p>
+                          <p><b>Last Start Time:</b> {mcServerInfo.lastStartTimestamp}</p>
+                          <p><b>Last Stop Time:</b> {mcServerInfo.lastStopTimestamp}</p>
                           <Form>
-                            <Button variant="success" onClick={start} className="me-2">
+                            <Button variant="success" onClick={() => start("mc-server")} className="me-2">
                               Start Server
                             </Button>
-                            <Button variant="danger"  onClick={stop} >
+                            <Button variant="danger"  onClick={() => stop("mc-server")} >
+                              Stop Server
+                            </Button>
+                          </Form>
+                          </Container>
+                        }
+
+                        {approved &&
+                        <Container className="login-container border rounded container-sm">  
+                          <h2>Valheim Server Info</h2>
+                          <p><b>Server status:</b> {vhServerInfo.status}</p>
+                          <p><b>Server Address:</b> vh.faditawfig.com</p>
+                          <p><b>Server Port:</b> 2456 </p>
+                          <p><b>Server IP:</b> 35.211.63.80</p>
+                          <p><b>Last Start Time:</b> {vhServerInfo.lastStartTimestamp}</p>
+                          <p><b>Last Stop Time:</b> {vhServerInfo.lastStopTimestamp}</p>
+                          <Form>
+                            <Button variant="success" onClick={() => start("vh-server")} className="me-2">
+                              Start Server
+                            </Button>
+                            <Button variant="danger"  onClick={() => stop("vh-server")} >
                               Stop Server
                             </Button>
                           </Form>
@@ -170,7 +190,8 @@ export const getServerSideProps = async (context) => {
 
   const { sub, email, first, last, role, ip1, ip2, approved } = decoded;
 
-  const instance = process.env.INSTANCE;
+  const mcInstance = process.env.MC_INSTANCE;
+  const vhInstance = process.env.VH_INSTANCE;
   const project = process.env.PROJECT;
   const zone = process.env.ZONE;
   console.log('Fetching server status...');
@@ -181,7 +202,7 @@ export const getServerSideProps = async (context) => {
   //Instantiates a client
   const computeClient = new InstancesClient();
   
-  async function callGet() {
+  async function callGet(instance, project, zone) {
     //Construct request
     const request = {
       instance,
@@ -195,13 +216,19 @@ export const getServerSideProps = async (context) => {
     return response[0]; 
   }
 
-  const serverInfo = await callGet().then(
+  const mcServerInfo = await callGet(mcInstance, project, zone).then(
+    (response) => {
+      return response;
+    }
+  );
+
+  const vhServerInfo = await callGet(vhInstance, project, zone).then(
     (response) => {
       return response;
     }
   );
 
   return {
-    props: { sub, serverInfo, email, first, last, role, ip1, ip2, approved }
+    props: { sub, mcServerInfo, vhServerInfo, email, first, last, role, ip1, ip2, approved }
   };
 }

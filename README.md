@@ -11,7 +11,8 @@ To configure, you will first have to create a Google Service account with permis
 Then set up an .env.local file and define the following environment variables:
 
     TOKEN_SECRET=secret string for encrypting/decoding JWT tokens
-    INSTANCE=VM instance name in Google Compute Engine
+    MC_INSTANCE=VM Minecraft instance name in Google Compute Engine
+    VH_INSTANCE=VM Valheim instance name in Google Compute Engine
     PROJECT=GCP project name that houses the VM
     ZONE=GCP region that houses the VM
     GOOLGE_APPLICATION_CREDENTIALS=A JSON service acocunt file 

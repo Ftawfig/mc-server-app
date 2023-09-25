@@ -20,15 +20,15 @@ export default function handler(req, res) {
                 console.log(`userData from dbService.insert: ${userData}`);
                 console.log(userData);
                 return res.status(200).json(createToken(userData, '7d'));
-            })
-            .catch(e => {
-                console.log(e);
-                
-                return res.status(401).json({
-                    status: 401,
-                    message: e
-                }); 
             });
-        })
+        }).catch((e) => {
+            console.log("Caught error in dbService.getUser");
+            console.log(e);
+            
+            return res.status(401).json({
+                status: 401,
+                message: e
+            }); 
+        });
     }
 }
