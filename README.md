@@ -31,3 +31,6 @@ Admin user document will have to be manually created in the firebase console.
 
 ### Push to Artifact Repository
     docker push us-east1-docker.pkg.dev/splendid-petal-379101/mc-server-repo/mc-server-web-app
+
+### Architecture Diagram
+![architecture](/public/mcserver.png)

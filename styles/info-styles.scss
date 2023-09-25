@@ -57,3 +57,17 @@
     margin: 15px;
     list-style-type: counter;
   }
+
+  .diagram-image {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    box-shadow: 5px 5px 5px #00000033;
+  }
+
+  .info-page hr {
+    border: 0;
+    height: 3px;
+    background: #333;
+    background-image: linear-gradient(to right, #000000, #333, #ccc);
+  }
