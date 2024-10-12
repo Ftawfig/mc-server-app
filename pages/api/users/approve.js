@@ -19,7 +19,6 @@ export default function handler(req, res) {
                     //create firewall rules for user's IP addresses 
                     return createFirewallRule(id, userData.ip1, userData.ip2, res);
                 });
-                
             });        
     }
 }

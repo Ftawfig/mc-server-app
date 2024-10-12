@@ -1,7 +1,20 @@
 const { getApps, initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 
-const serviceAccount = process.env.GOOLGE_APPLICATION_CREDENTIALS;
+//const serviceAccount = process.env.GOOLGE_APPLICATION_CREDENTIALS;
+
+const serviceAccount =  {
+    type: process.TYPE,
+    project_id: process.PROJECT_ID,
+    private_key_id: process.PRIVATE_KEY_ID,
+    private_key:process.PRIVATE_KEY,
+    client_email:process.CLIENT_EMAIL,
+    client_id: process.CLIENT_ID,
+    auth_uri:process.AUTH_URI,
+    token_uri: process.TOKEN_URI,
+    auth_provider_x509_cert_url: process.AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.CLIENT_X509_CERT_URL
+  }
 
 export const dbService = {
     insert,
