@@ -3,18 +3,18 @@ const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestor
 
 //const serviceAccount = process.env.GOOLGE_APPLICATION_CREDENTIALS;
 
-const serviceAccount =  {
-    type: process.TYPE,
-    project_id: process.PROJECT_ID,
-    private_key_id: process.PRIVATE_KEY_ID,
-    private_key:process.PRIVATE_KEY,
-    client_email:process.CLIENT_EMAIL,
-    client_id: process.CLIENT_ID,
-    auth_uri:process.AUTH_URI,
-    token_uri: process.TOKEN_URI,
-    auth_provider_x509_cert_url: process.AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.CLIENT_X509_CERT_URL
-  }
+const serviceAccount = {
+    type: process.env.TYPE,
+    project_id: process.env.PROJECT_ID,
+    private_key_id: process.env.PRIVATE_KEY_ID,
+    private_key: process.env.PRIVATE_KEY,
+    client_email: process.env.CLIENT_EMAIL,
+    client_id: process.env.CLIENT_ID,
+    auth_uri: process.env.AUTH_URI,
+    token_uri: process.env.TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.CLIENT_X509_CERT_URL
+}
 
 export const dbService = {
     insert,
@@ -28,26 +28,26 @@ export const dbService = {
 
 if (getApps().length < 1) {
     initializeApp({
-      credential: cert(serviceAccount)
+        credential: cert(serviceAccount)
     });
 }
 
-const db =  getFirestore();
+const db = getFirestore();
 const collection = db.collection('users');
 
 async function insert(data) {
-    const { 
-        email, 
-        password, 
-        first, 
+    const {
+        email,
+        password,
+        first,
         last,
         ip1
     } = data;
 
     collection.doc(email);
 
-     //if with this email already exists throw an error
-    const user = await collection.where('email', '==', email).get(); 
+    //if with this email already exists throw an error
+    const user = await collection.where('email', '==', email).get();
 
     if (!user.empty) {
         throw 'User already exists!';
@@ -58,15 +58,15 @@ async function insert(data) {
 
     //populate the fields for the new user document
     doc.set({
-        'email' : email,
-        'password' : password,
-        'first' : first,
-        'last' : last,
-        'role' : 'user',
+        'email': email,
+        'password': password,
+        'first': first,
+        'last': last,
+        'role': 'user',
         'sign-up-date': Date.now(),
-        'ip1' : ip1,
-        'ip2' : "",
-        'approved' : false
+        'ip1': ip1,
+        'ip2': "",
+        'approved': false
     });
 
     return await getUser(email, password);
@@ -77,7 +77,7 @@ async function getAll() {
     let users = {};
 
     snapshot.forEach(doc => {
-        users = {...users, [doc.id] : doc.data()};
+        users = { ...users, [doc.id]: doc.data() };
     });
 
     return users;
@@ -90,9 +90,9 @@ async function getUser(email, password) {
         .where("password", "==", password)
         .get()
         .then(querySnapshot => {
-            if(!querySnapshot.empty) {
-                const user = { 
-                    id: querySnapshot.docs[0].id, 
+            if (!querySnapshot.empty) {
+                const user = {
+                    id: querySnapshot.docs[0].id,
                     data: querySnapshot.docs[0].data()
                 };
 
@@ -109,7 +109,7 @@ async function getUserById(id) {
 }
 
 async function approveUser(id) {
-    return await db.doc('users/' + id).update({ 'approved' : true });
+    return await db.doc('users/' + id).update({ 'approved': true });
 }
 
 async function deleteUser(id) {
@@ -117,8 +117,8 @@ async function deleteUser(id) {
 }
 
 async function updateUserIPs(id, ip1, ip2) {
-    return await db.doc('users/' + id).update({ 
-        "ip1" : ip1,
-        "ip2" : ip2
+    return await db.doc('users/' + id).update({
+        "ip1": ip1,
+        "ip2": ip2
     });
 }
