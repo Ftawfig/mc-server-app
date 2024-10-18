@@ -22,7 +22,7 @@ export function add_firewall_rule(firewallPolicy, firewallPolicyRuleResource) {
   // const requestId = 'abc123'
 
   // Imports the Compute library
-  const {FirewallPoliciesClient} = require('@google-cloud/compute').v1;
+  const { FirewallPoliciesClient } = require('@google-cloud/compute').v1;
 
   // Instantiates a client
   const computeClient = new FirewallPoliciesClient();

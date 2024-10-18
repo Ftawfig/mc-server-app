@@ -5,7 +5,7 @@ export default function Footer() {
         <footer>
             <span>Fadi Tawfig</span>
             <span><Link href='/info'>Project Info</Link></span>
-            <span><a href='https://porfolio.faditawfig.com'>Portfolio</a></span>
+            <span><a href='https://portfolio.faditawfig.com'>Portfolio</a></span>
         </footer>
     );
 }
